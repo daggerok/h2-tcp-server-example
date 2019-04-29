@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.github.daggerok</groupId>
+  <artifactId>h2-tcp-server-example</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <h2.version>1.4.199</h2.version>
+
+    <java.version>1.8</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+
+    <encoding>UTF-8</encoding>
+    <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
+  </properties>
+
+  <build>
+    <defaultGoal>dependency:copy exec:exec</defaultGoal>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.1</version>
+        <executions>
+          <execution>
+            <id>copy</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <artifactItems>
+            <artifactItem>
+              <groupId>com.h2database</groupId>
+              <artifactId>h2</artifactId>
+              <version>${h2.version}</version>
+              <type>jar</type>
+              <overWrite>false</overWrite>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <!--<destFileName>h2.jar</destFileName>-->
+            </artifactItem>
+          </artifactItems>
+          <outputDirectory>${project.build.directory}/wars</outputDirectory>
+          <overWriteReleases>false</overWriteReleases>
+          <overWriteSnapshots>true</overWriteSnapshots>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <configuration>
+          <executable>java</executable>
+          <keepAlive>true</keepAlive>
+          <async>false</async>
+          <arguments><!-- see org.h2.tools.Server class -->
+            <argument>-cp</argument>
+            <argument>${project.build.directory}/lib/h2-${h2.version}.jar</argument>
+            <argument>org.h2.tools.Server</argument>
+            <argument>-tcp</argument>
+            <argument>-tcpAllowOthers</argument>
+            <argument>-ifNotExists</argument>
+            <argument>-web</argument>
+            <argument>-webAllowOthers</argument>
+            <argument>-baseDir</argument>
+            <argument>${project.build.directory}</argument>
+            <!--
+            <argument>-webDaemon</argument>
+            <argument>-browser</argument>
+            <argument>-pg</argument>
+            <argument>-pgDaemon</argument>
+            <argument>-pgAllowOthers</argument>
+            <argument>-pgPort</argument>
+            <argument>3456</argument>
+            <argument>-trace</argument>
+            <argument>-help</argument>
+            -->
+          </arguments>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
