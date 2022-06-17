@@ -19,4 +19,8 @@ mvn dependency:copy exec:exec
 # mvn dependency:copy ; java -cp ./target/lib/*.jar org.h2.tools.Server -tcp -tcpAllowOthers -ifNotExists -web -webAllowOthers -baseDir ./target/
 ```
 
+## docker
+
+See H2 [Dockerfile](https://github.com/daggerok/docker/blob/master/h2/Dockerfile) for the reference
+
 NOTE: _This project has been based on [GitHub: daggerok/main-starter](https://github.com/daggerok/main-starter)_
